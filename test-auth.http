@@ -1,0 +1,77 @@
+# Test Authentication APIs with Enhanced Duplicate Email Check
+
+## Register a new user
+POST http://localhost:5295/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com", 
+  "gender": "male",
+  "timezone": "America/New_York",
+  "password": "password123"
+}
+
+###
+
+## Test duplicate email with same case
+POST http://localhost:5295/auth/register
+Content-Type: application/json
+
+{
+  "name": "Another User",
+  "email": "test@example.com",
+  "gender": "female",
+  "timezone": "Europe/London",
+  "password": "differentpassword"
+}
+
+###
+
+## Test duplicate email with different case (should still fail)
+POST http://localhost:5295/auth/register
+Content-Type: application/json
+
+{
+  "name": "Case Test User",
+  "email": "TEST@EXAMPLE.COM",
+  "gender": "other",
+  "timezone": "Asia/Tokyo",
+  "password": "anotherpassword"
+}
+
+###
+
+## Test duplicate email with extra spaces (should still fail)
+POST http://localhost:5295/auth/register
+Content-Type: application/json
+
+{
+  "name": "Space Test User",
+  "email": "  test@example.com  ",
+  "gender": "male",
+  "timezone": "Australia/Sydney",
+  "password": "spacepassword"
+}
+
+###
+
+## Login with the user (case insensitive)
+POST http://localhost:5295/auth/login
+Content-Type: application/json
+
+{
+  "email": "TEST@EXAMPLE.COM",
+  "password": "password123"
+}
+
+###
+
+## Test invalid login
+POST http://localhost:5295/auth/login
+Content-Type: application/json
+
+{
+  "email": "wrong@example.com",
+  "password": "wrongpassword"
+}
